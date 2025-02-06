@@ -1,1 +1,1 @@
-from .core import ChatMemory
+from .core import ChatMemory, Message
