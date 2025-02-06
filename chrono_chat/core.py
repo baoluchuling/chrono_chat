@@ -19,7 +19,7 @@ class Message:
     def __repr__(self):
         return f"{self.role}: {self.content} (Agent: {self.agent_name} ID: {self.agent_id}, Model: {self.model}, Vendor: {self.vendor}, Timestamp: {self.timestamp})"
 
-class ChatMemory:
+class MemCore:
     """管理 AI 对话历史，支持默认和自定义角色"""
     
     _DEFAULT_ROLES = {"system", "user", "assistant"}
