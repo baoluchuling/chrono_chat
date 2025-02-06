@@ -37,9 +37,8 @@ class MemCore:
         """内部方法：添加消息"""
         
         message = Message(role, content, agent_id, agent_name, model, vendor, timestamp)
-            
-        with self._lock:
-            self.add_message(message)
+        
+        self.add_message(message)
 
     def add_message(self, message: Message):
         """内部方法：添加消息"""
