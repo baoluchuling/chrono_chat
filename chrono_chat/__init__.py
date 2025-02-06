@@ -1,1 +1,1 @@
-from .core import AIBridge
+from .core import ChatMemory
