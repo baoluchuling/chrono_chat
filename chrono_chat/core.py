@@ -72,6 +72,10 @@ class MemCore:
             raise ValueError(f"Role '{role}' is already a default role and cannot be redefined.")
         self._roles.add(role)
 
+    def get_last_message(self):
+        """获取当前对话历史"""
+        return self.messages[-1] if self.messages else None
+
     def get_messages(self):
         """获取当前对话历史"""
         return self.messages
