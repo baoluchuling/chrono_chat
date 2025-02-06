@@ -17,7 +17,7 @@ class Message:
         self.timestamp = timestamp or datetime.utcnow().isoformat()  # 使用 UTC 格式时间
 
     def __repr__(self):
-        return f"{self.role}: {self.content} (Agent: {self.agent_name} ID: {self.agent_id}, Model: {self.model}, Vendor: {self.vendor}, Timestamp: {self.timestamp})"
+        return f"{self.role}: {self.content[:50]}... (Agent: {self.agent_name} ID: {self.agent_id}, Model: {self.model}, Vendor: {self.vendor}, Timestamp: {self.timestamp})"
 
 class MemCore:
     """管理 AI 对话历史，支持默认和自定义角色"""
@@ -35,13 +35,21 @@ class MemCore:
 
     def _add_message(self, role, content, agent_id=None, agent_name=None, model=None, vendor=None, timestamp=None):
         """内部方法：添加消息"""
+        
+        message = Message(role, content, agent_id, agent_name, model, vendor, timestamp)
+            
+        with self._lock:
+            self.add_message(message)
+
+    def add_message(self, message: Message):
+        """内部方法：添加消息"""
+        if message.role not in self._roles:
+            raise ValueError(f"Invalid role: {message.role}. Allowed roles: {self._roles}")
+        
         with self._lock:
             if len(self.messages) >= self.max_history_size:
                 self.messages.pop(0)
-            logging.info(f"Adding message: role: {role} - content: {content[:50]}... - agent_id: {agent_id} - agent_name: {agent_name} - model: {model} - vendor: {vendor} - timestamp: {timestamp}")  # 打印消息内容的前 50 字符
-            if role not in self._roles:
-                raise ValueError(f"Invalid role: {role}. Allowed roles: {self._roles}")
-            message = Message(role, content, agent_id, agent_name, model, vendor, timestamp)
+            logging.info(f"Adding message: {message}")
             self.messages.append(message)
 
     def add_user_message(self, content, agent_id=None, agent_name=None, model=None, vendor=None, timestamp=None):
