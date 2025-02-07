@@ -97,11 +97,13 @@ class MemCore:
             if role == "system" and not system_message:
                 system_message = message
             
-            api_message = {
-                "role": role,
-                "content": message.content
-            }
-            api_messages.append(api_message)
+            # 确保没有重复插入 system 消息
+            if role != "system":
+                api_message = {
+                    "role": role,
+                    "content": message.content
+                }
+                api_messages.append(api_message)
         
         # 限制最大消息条数，从后往前裁剪
         if max_messages:
@@ -109,8 +111,8 @@ class MemCore:
             if len(api_messages) > max_messages:
                 api_messages = api_messages[-max_messages:]
 
-        # 确保 system 消息被包含
-        if system_message and system_message not in api_messages:
+        # 确保 system 消息被包含（如果存在的话），并且只插入一次
+        if system_message and not any(msg['role'] == 'system' for msg in api_messages):
             api_messages.insert(0, {
                 "role": "system",
                 "content": system_message.content
