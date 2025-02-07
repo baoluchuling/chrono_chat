@@ -27,7 +27,7 @@ class MemCore:
     def __init__(self, system_message=None, max_history_size=1000):
         """初始化对话历史，可选 system_message"""
         self._lock = threading.Lock()
-        self.messages = []
+        self.messages: list[Message] = []
         self.max_history_size = max_history_size
         self._roles = set(self._DEFAULT_ROLES)  # 允许的角色集合
         if system_message:
