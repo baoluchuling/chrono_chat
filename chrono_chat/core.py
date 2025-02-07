@@ -48,7 +48,7 @@ class MemCore:
         with self._lock:
             if len(self.messages) >= self.max_history_size:
                 self.messages.pop(0)
-            logging.info(f"Adding message: {message}")
+            # logging.info(f"Adding message: {message}")
             self.messages.append(message)
 
     def add_user_message(self, content, agent_id=None, agent_name=None, model=None, vendor=None, timestamp=None):
