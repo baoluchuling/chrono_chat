@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 
 class Message:
     """用于封装每一条对话消息"""
-    def __init__(self, content, role=None, agent_id=None, agent_name=None, model=None, vendor=None, timestamp=None):
+    def __init__(self, content, role="user", agent_id=None, agent_name=None, model=None, vendor=None, timestamp=None):
         self.role = role
         self.content = content
         self.agent_id = agent_id  # 对话来源智能体的 ID
