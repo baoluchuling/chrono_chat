@@ -7,14 +7,14 @@ logging.basicConfig(level=logging.INFO)
 
 class Message:
     """用于封装每一条对话消息"""
-    def __init__(self, role, content, agent_id=None, agent_name=None, model=None, vendor=None, timestamp=None):
+    def __init__(self, content, role=None, agent_id=None, agent_name=None, model=None, vendor=None, timestamp=None):
         self.role = role
         self.content = content
         self.agent_id = agent_id  # 对话来源智能体的 ID
         self.agent_name = agent_name  # 对话来源智能体的名称
         self.model = model  # 使用的模型
         self.vendor = vendor  # 使用的供应商
-        self.timestamp = timestamp or datetime.utcnow().isoformat()  # 使用 UTC 格式时间
+        self.timestamp = timestamp or datetime.now(datetime.timezone.utc).isoformat()  # 使用 UTC 格式时间
 
     def __repr__(self):
         return f"{self.role}: {self.content[:50]}... (Agent: {self.agent_name} ID: {self.agent_id}, Model: {self.model}, Vendor: {self.vendor}, Timestamp: {self.timestamp})"
