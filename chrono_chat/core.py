@@ -14,7 +14,7 @@ class Message:
         self.agent_name = agent_name  # 对话来源智能体的名称
         self.model = model  # 使用的模型
         self.vendor = vendor  # 使用的供应商
-        self.timestamp = timestamp or datetime.now(datetime.timezone.utc).isoformat()  # 使用 UTC 格式时间
+        self.timestamp = timestamp or datetime.utcnow().isoformat()  # 使用 UTC 格式时间
 
     def __repr__(self):
         return f"{self.role}: {self.content[:50]}... (Agent: {self.agent_name} ID: {self.agent_id}, Model: {self.model}, Vendor: {self.vendor}, Timestamp: {self.timestamp})"
@@ -36,7 +36,7 @@ class MemCore:
     def _add_message(self, role, content, agent_id=None, agent_name=None, model=None, vendor=None, timestamp=None):
         """内部方法：添加消息"""
         
-        message = Message(role, content, agent_id, agent_name, model, vendor, timestamp)
+        message = Message(content, role, agent_id, agent_name, model, vendor, timestamp)
         
         self.add_message(message)
 
