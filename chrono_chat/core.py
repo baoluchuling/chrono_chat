@@ -2,6 +2,7 @@ import time
 from datetime import datetime
 import logging
 import threading
+from typing import Optional
 
 logging.basicConfig(level=logging.INFO)
 
@@ -124,15 +125,26 @@ class MemCore:
         """重置对话历史，保留第一条 system 信息"""
         # 找到是否有 system 信息，如果有，保留第一条
         system_message_exists = any(msg.role == "system" for msg in self.messages)
-        
-        self.messages = []  # 清空所有消息
+
+        first_system_message: Optional[str] = None
         
         if system_message_exists:
-            # 如果有 system 消息，保留第一条 system 消息
-            first_system_message = next(msg for msg in self.messages if msg.role == "system")
-            self._add_message("system", first_system_message.content, first_system_message.agent_id,
-                             first_system_message.agent_name, first_system_message.model, first_system_message.vendor)
+            # 使用 next() 时加上默认值，避免 StopIteration 异常
+            first_system_message = next((msg for msg in self.messages if msg.role == "system"), None)
+           
+        # 清空所有消息
+        self.messages = []
 
+        if first_system_message:
+             self._add_message(
+                "system", 
+                first_system_message.content, 
+                first_system_message.agent_id,
+                first_system_message.agent_name, 
+                first_system_message.model, 
+                first_system_message.vendor
+            )
+            
     def erasure_last_message(self):
         """重置上次对话"""
         self.messages.pop()
